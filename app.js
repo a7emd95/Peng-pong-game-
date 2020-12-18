@@ -151,7 +151,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 
     }
+  function ballMovement(){
 
+
+  }
 
 
     function update() {
@@ -168,23 +171,40 @@ document.addEventListener("DOMContentLoaded", function (event) {
         //make let
         var player = (ball.xAxis < (canvas.width / 2)) ? user : com;
 
-        if (collision(ball, player)){
+        if (collision(ball, player)) {
 
-             //change volcityX and volcityY depend on where ball hit paddle 
+            //change volcityX and volcityY depend on where ball hit paddle 
 
-             //make let 
-             var collidPoint = ball.yAxis - ( player.yAxis + player.heigt / 2);
-             collidPoint = collidPoint /( player.heigt / 2 );
-             var angle = collidPoint * (Math.PI / 4 );
-
-              var direction =   (ball.xAxis < (canvas.width / 2)) ? 1 : -1;
-             ball.velocityX = direction *  ball.speed *  Math.cos(angle);
-             ball.velocityY = ball.speed * Math.sin(angle)
-;
-
-
+            //make let 
+            var collidPoint = ball.yAxis - (player.yAxis + player.heigt / 2);
+            collidPoint = collidPoint / (player.heigt / 2);
+            var angle = collidPoint * (Math.PI / 4);
+            // make let ---direicrion of x
+            var direction = (ball.xAxis < (canvas.width / 2)) ? 1 : -1;
+            ball.velocityX = direction * ball.speed * Math.cos(angle);
+            ball.velocityY = ball.speed * Math.sin(angle) ;
         }
 
+        upadteScore();
+
+
+    }
+     function resetBall(){
+         ball.xAxis =  canvas.width / 2 ;
+         ball.yAxis = canvas.height / 2 ;
+         ball.speed = 5 ;
+         ball.velocityX = -ball.velocityX;
+     }
+
+    function upadteScore(){
+        if((ball.xAxis - ball.radius) < 0 ){
+              com.score++;
+              resetBall() 
+        }else if((ball.xAxis + ball.radius) < canvas.width){
+              user.score++;
+              resetBall(); 
+
+        }
 
     }
 
