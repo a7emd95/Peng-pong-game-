@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         ctx.font = "65px fantasy";
         ctx.fillText(text, xAxis, yAxis)
     }
-    
+
 
     //    setInterval(render , 1000)
 
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     //use const
     var net = {
 
-        "xAxis": (canvas.width / 2) - ( 2 / 2), // 2 is width of net 
+        "xAxis": (canvas.width / 2) - (2 / 2), // 2 is width of net 
 
         "yAxis": 0,
 
@@ -76,13 +76,19 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     //use const 
     var ball = {
-      "xAxis" : canvas.width / 2 ,
+        "xAxis": canvas.width / 2,
 
-      "yAxis" : canvas.height / 2 ,
+        "yAxis": canvas.height / 2,
 
-      "radius" : 10 ,
+        "speed": 5, //speed 
 
-      "color" : "white"
+        "velocityX": 5, // speed + direction 
+
+        "velocityY": 5, //speed + direction
+
+        "radius": 10,
+
+        "color": "white"
 
     }
 
@@ -105,36 +111,92 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
    */
 
-   function drawScore(){
-     //user score 
-     drawText(user.score , canvas.width/4 , canvas.height/7 ,"white" )
-     //com score
-     drawText(com.score , 3*(canvas.width/4) , canvas.height/7 ,"white" )
+    function drawScore() {
+        //user score 
+        drawText(user.score, canvas.width / 4, canvas.height / 7, "white")
+        //com score
+        drawText(com.score, 3 * (canvas.width / 4), canvas.height / 7, "white")
 
-   }
-
-   //use var 
-   let rectX = 0
-   function render() {
-
-       drawRect(0, 0, 600, 400, "black"); //canvans
-       drawScore();
-       drawNet();
-       drawRect(user.xAxis , user.yAxis , user.width , user.heigt , user.color)
-       drawRect(com.xAxis , com.yAxis , com.width , com.heigt , com.color);
-       drawCricle(ball.xAxis , ball.yAxis , ball.radius , ball.color)
-   }
-
-
-
-   function game(){
-    render();
-     update()
     }
 
-   const framePerscond = 50 ;
-   
-  // setInterval(game , 1000 / framePerscond );
+    //use var 
+    let rectX = 0
+    function render() {
+
+        drawRect(0, 0, 600, 400, "black"); //canvans
+        drawScore();
+        drawNet();
+        drawRect(user.xAxis, user.yAxis, user.width, user.heigt, user.color)
+        drawRect(com.xAxis, com.yAxis, com.width, com.heigt, com.color);
+        drawCricle(ball.xAxis, ball.yAxis, ball.radius, ball.color)
+    }
+
+    function collision(player, ball) {
+        //player direction 
+        player.top = player.yAxis;
+        player.bottom = player.yAxis + player.heigt;
+        player.left = player.xAxis;
+        player.right = player.xAxis + player.width;
+
+        //ball direction
+        ball.top = ball.yAxis - ball.radius;
+        ball.bottom = ball.yAxis + ball.radius;
+        ball.right = ball.xAxis + ball.radius;
+        ball.left = ball.xAxis - ball.radius;
+
+        return ball.right > player.left && ball.top < player.bottom &&
+            ball.left < player.right && ball.bottom > player.top;
+        //if true hppen collision false not happen 
+
+
+
+    }
+
+
+
+    function update() {
+
+        //ball movments 
+        ball.xAxis = velocityX;
+        ball.yAxis = velocityY;
+
+        if (ball.yAxis + ball.radius > canvas.height || ball.yAxis - ball.radius < 0) {
+
+            velocityY = -velocityY; //change direction of ball in y axis
+
+        }
+        //make let
+        var player = (ball.xAxis < (canvas.width / 2)) ? user : com;
+
+        if (collision(ball, player)){
+
+             //change volcityX and volcityY depend on where ball hit paddle 
+
+             //make let 
+             var collidPoint = ball.yAxis - ( player.yAxis + player.heigt / 2);
+             collidPoint = collidPoint /( player.heigt / 2 );
+             var angle = collidPoint * (Math.PI / 4 );
+
+              var direction =   (ball.xAxis < (canvas.width / 2)) ? 1 : -1;
+             ball.velocityX = direction *  ball.speed *  Math.cos(angle);
+             ball.velocityY = ball.speed * Math.sin(angle)
+;
+
+
+        }
+
+
+    }
+
+    function game() {
+        render();
+        update(); //movments collision score updates
+    }
+
+    const framePerscond = 50; //fifty frame per second
+
+    // setInterval(game , 1000 / framePerscond );
+
 })
 
 
