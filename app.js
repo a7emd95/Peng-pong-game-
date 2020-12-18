@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 
     function render() {
-        drawRect(0, 0, 600, 400, "black"); //canvans
+        drawRect(0, 0, 900, 600, "black"); //canvans
         drawScore();
         drawNet();
         drawRect(user.xAxis, user.yAxis, user.width, user.heigt, user.color)
@@ -172,18 +172,18 @@ document.addEventListener("DOMContentLoaded", function (event) {
         com.yAxis += (ball.yAxis - (com.yAxis + com.heigt / 2)) * computerLevel;
     }
 
-      function ballWallHits(){
+    function ballWallHits() {
 
-       
+
 
         if (ball.yAxis + ball.radius > canvas.height || ball.yAxis - ball.radius < 0) {
 
             ball.velocityY = -ball.velocityY; //change direction of ball in y axis
 
         }
-      }
+    }
 
-      function ballPaddleCollision(){
+    function ballPaddleCollision() {
 
         let player = (ball.xAxis < (canvas.width / 2)) ? user : com;
         if (collision(player, ball)) {
@@ -204,17 +204,17 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 
         }
-      }
+    }
 
     function update() {
         //ball movments 
         ball.xAxis += ball.velocityX;
         ball.yAxis += ball.velocityY;
-     
-         ballWallHits()
-         moveComputerPaddle();
-         ballPaddleCollision()
-         upadteScore();
+
+        ballWallHits()
+        moveComputerPaddle();
+        ballPaddleCollision()
+        upadteScore();
 
 
     }
@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     const framePerscond = 50; //fifty frame per second
 
- var timer = setInterval(game, 1000 / framePerscond);
+    var timer = setInterval(game, 1000 / framePerscond);
 
 })
 
